@@ -6,12 +6,12 @@
 class Segment {
   constructor(startPoint, endPoint, level) {
     this.startPoint = {
-      x: startPoint[0],
-      y: startPoint[1]
+      x: startPoint.x,
+      y: startPoint.y
     };
     this.endPoint = {
-      x: endPoint[0],
-      y: endPoint[1]
+      x: endPoint.x,
+      y: endPoint.y
     };
     this.level = level;
   }

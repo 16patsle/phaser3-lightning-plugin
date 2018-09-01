@@ -5,6 +5,7 @@
 
 import Segment from './Segment';
 import getRandomArbitrary from './getRandomArbitrary';
+import averagePoint from './averagePoint';
 
 class LightningGenerator {
   constructor(generations, maximumOffset, lengthScale) {
@@ -25,16 +26,14 @@ class LightningGenerator {
       for (const segmentOld of segmentList) {
         let segment = segmentOld.clone();
 
-        let midPoint = {
-          x: Phaser.Math.Average([segment.startPoint.x, segment.endPoint.x]),
-          y: Phaser.Math.Average([segment.startPoint.y, segment.endPoint.y])
-        };
+        let midPoint = averagePoint(segment.startPoint, segment.endPoint);
 
         // Offset the midpoint by a random amount along the normal.
         const angle = Math.atan2(
           segment.endPoint.y - segment.startPoint.y,
           segment.endPoint.x - segment.startPoint.x
         );
+
         const randOffset = getRandomArbitrary(-offsetAmount, offsetAmount);
         const x1 = Math.sin(angle) * randOffset + midPoint.x;
         const y1 = -Math.cos(angle) * randOffset + midPoint.y;
@@ -51,8 +50,8 @@ class LightningGenerator {
 
         // Create two new segments that span from the start point to the end point,
         // but with the new (randomly-offset) midpoint.
-        newList.push(new Segment(startPoint, midPoint, segment.level));
-        newList.push(new Segment(midPoint, endPoint, segment.level));
+        newList.push(new Segment(segment.startPoint, midPoint, segment.level));
+        newList.push(new Segment(midPoint, segment.endPoint, segment.level));
 
 
         if ( /*getRandomArbitrary(0, 2) < 1 && i % 2 == 0*/ i === 0 || i === 2) {
@@ -78,11 +77,9 @@ class LightningGenerator {
             this.lengthScale * distance
           );
           // lengthScale is, for best results, < 1.  0.7 is a good value.
-          /*
-                                direction = midPoint - startPoint;
-                                splitEnd = Rotate(direction, randomSmallAngle)*lengthScale + midPoint;
-                                */
-          newList.push(new Segment(midPoint, splitEnd, segment.level + 1));
+          newList.push(
+            new Segment(midPoint, splitEnd, segment.level + 1)
+          );
         }
 
       }

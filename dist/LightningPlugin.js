@@ -323,6 +323,7 @@ LightningPlugin.LightningGenerator = __WEBPACK_IMPORTED_MODULE_0__LightningGener
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Segment__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getRandomArbitrary__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__averagePoint__ = __webpack_require__(4);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -333,6 +334,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
  * @author       Patrick Sletvold
  * @license      {@link https://github.com/photonstorm/phaser3-plugin-template/blob/master/LICENSE|MIT License}
  */
+
 
 
 
@@ -360,10 +362,7 @@ function () {
         for (var _i = 0; _i < segmentList.length; _i++) {
           var segmentOld = segmentList[_i];
           var segment = segmentOld.clone();
-          var midPoint = {
-            x: Phaser.Math.Average([segment.startPoint.x, segment.endPoint.x]),
-            y: Phaser.Math.Average([segment.startPoint.y, segment.endPoint.y])
-          }; // Offset the midpoint by a random amount along the normal.
+          var midPoint = Object(__WEBPACK_IMPORTED_MODULE_2__averagePoint__["a" /* default */])(segment.startPoint, segment.endPoint); // Offset the midpoint by a random amount along the normal.
 
           var angle = Math.atan2(segment.endPoint.y - segment.startPoint.y, segment.endPoint.x - segment.startPoint.x);
           var randOffset = Object(__WEBPACK_IMPORTED_MODULE_1__getRandomArbitrary__["a" /* default */])(-offsetAmount, offsetAmount);
@@ -382,8 +381,8 @@ function () {
           // but with the new (randomly-offset) midpoint.
 
 
-          newList.push(new __WEBPACK_IMPORTED_MODULE_0__Segment__["a" /* default */](startPoint, midPoint, segment.level));
-          newList.push(new __WEBPACK_IMPORTED_MODULE_0__Segment__["a" /* default */](midPoint, endPoint, segment.level));
+          newList.push(new __WEBPACK_IMPORTED_MODULE_0__Segment__["a" /* default */](segment.startPoint, midPoint, segment.level));
+          newList.push(new __WEBPACK_IMPORTED_MODULE_0__Segment__["a" /* default */](midPoint, segment.endPoint, segment.level));
 
           if (
           /*getRandomArbitrary(0, 2) < 1 && i % 2 == 0*/
@@ -402,11 +401,6 @@ function () {
             }
 
             Phaser.Math.RotateAroundDistance(splitEnd, midPoint.x, midPoint.y, branchAngle, this.lengthScale * distance); // lengthScale is, for best results, < 1.  0.7 is a good value.
-
-            /*
-                                  direction = midPoint - startPoint;
-                                  splitEnd = Rotate(direction, randomSmallAngle)*lengthScale + midPoint;
-                                  */
 
             newList.push(new __WEBPACK_IMPORTED_MODULE_0__Segment__["a" /* default */](midPoint, splitEnd, segment.level + 1));
           }
@@ -448,12 +442,12 @@ function () {
     _classCallCheck(this, Segment);
 
     this.startPoint = {
-      x: startPoint[0],
-      y: startPoint[1]
+      x: startPoint.x,
+      y: startPoint.y
     };
     this.endPoint = {
-      x: endPoint[0],
-      y: endPoint[1]
+      x: endPoint.x,
+      y: endPoint.y
     };
     this.level = level;
   }
@@ -488,6 +482,19 @@ function () {
  */
 function getRandomArbitrary(min, max) {
   return Math.random() * (max - min) + min;
+}
+
+/***/ }),
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = averagePoint;
+function averagePoint(point1, point2) {
+  return {
+    x: Phaser.Math.Average([point1.x, point2.x]),
+    y: Phaser.Math.Average([point1.y, point2.y])
+  };
 }
 
 /***/ })
