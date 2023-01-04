@@ -26,10 +26,10 @@
     "eslint": "^8.28.0",
     "http-server": "^14.1.1",
     "jsdoc-to-markdown": "^7.1.1",
-    "webpack": "^3.10.0"
+    "webpack": "^5.75.0"
   },
   "dependencies": {
-    "@babel/core": "^7.0.0",
+    "@babel/core": "^7.20.7",
     "@babel/preset-env": "^7.0.0",
     "babel-loader": "^8.0.0"
   }
